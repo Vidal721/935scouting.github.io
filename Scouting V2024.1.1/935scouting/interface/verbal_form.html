@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>New Verbal Report : 935 Scouting</title>
+		<script type="text/javascript"></script>
+		<link href="../script/choices-library/styles/choices.min.css" rel="stylesheet">
+		<link href="../data/styles.css" rel="stylesheet" type="text/css">
+		<!-- Include choices library -->
+		<script type="text/javascript" src="../script/choices-library/scripts/choices.min.js"></script>
+	</head>
+	<body onload="pick_button()">
+		<h1>NEW VERBAL REPORT</h1>
+		<div class="buttonList" id="switchFormButton" style="margin-bottom: 36px;">
+			<div class="tooltip">
+				<span class="tooltiptext">Switch to the match form if you're collecting data by watching a team compete.</span>
+				<a href="scout_form.html">Match Form</a>
+			</div>
+		</div>
+		<form id="scout" action="" onsubmit="return false">
+			
+			<fieldset>
+				<input type="hidden" id="formtype" name="formtype" value="verbal">
+				<div class="tooltip">
+					<span class="tooltiptext">Make sure to spell your name the same way on every form. Use first name and last inital (i.e. John S)</span>
+					<label for="name">Scouter Name</label>
+				</div>
+				<input id="inName" name="name" required><br>
+				<span id="teamname" style="float: right; text-align: center; margin-right: 12px; transform: translateY(10px);">Type a team number to verify their name here</span>
+				<div class="tooltip">
+					<span class="tooltiptext">Enter the team number of the team you are currently scouting.</span>
+					<label for="teamno">Team #</label>
+				</div>
+				<input id="inTeamno" name="teamno" autocomplete="off" required onInput="append_team_name()"><br>
+				<div class="tooltip">
+					<span class="tooltiptext">Pick the event that this data was gathered at. If this field is grayed out, then it has already been pre-selected.</span>
+					<label for="eventkey">Event Name</label>
+				</div>
+				<select required class="form-control" name="inEventkey" id="inEventkey">
+					<option value="cowtownthrowdown">cowtownthrowdown</option>
+				</select>
+			</fieldset>
+			
+			<fieldset>
+				<h3 class="fieldsetHead">General</h3>
+				<label for="drivetrain"><strong>Robot</strong> - Drive train</label>
+				<select name="drivetrain" id="inDrivetrain" required>
+					<option value="Tank">Tank - Wheels</option>
+					<option value="Tank-Treaded">Tank - Tank Treads</option>
+					<option value="Tank Omni-Wheeled">Tank - Omni Wheels</option>
+					<option value="Mecanum">Mecanum</option>
+					<option value="Swerve">Swerve</option>
+					<option value="Other">Other</option>
+				</select><br>
+				<label for="weight"><strong>Robot</strong> - Weight (lbs)</label>
+				<input name="weight" id="inWeight" autocomplete="off" required><br>
+				<input type="checkbox" name="trench" id="inTrench"><label for="trench">Robot is short enough to fit under stage run</label><br>
+			</fieldset>
+			
+			<fieldset>
+				<h3 class="fieldsetHead">Gameplay</h3>
+				<!--
+				<label for="innerport"><strong>Power Port</strong> - Inner port hit rate</label>
+				<select name="innerport" id="inInnerport" required>
+					<option value="0">Unable to hit consistently</option>
+					<option value="1">Usually hits consistently</option>
+				</select><br>	we haven't used this data for anything yet. removing for now-->
+				<div class="tooltip">
+					<span class="tooltiptext">"Is your team willing to play defense or would you rather not?"</span>
+					<label for="defense"><strong>Defense</strong> - Willingness to perform</label>
+				</div>
+				<select name="defense" id="inDefense" required>
+					<option value="0">Complete incapability</option>
+					<option value="1">Would rather not</option>
+					<option value="2">Able and willing</option>
+				</select><br>
+				<!--<input type="checkbox" name="cp2" id="inCp2"><label for="cp2">Able to spin the control panel to activate Stage 2</label><br>
+				<input type="checkbox" name="cp3" id="inCp3"><label for="cp3">Able to spin the control panel to activate Stage 3</label><br>-->
+			</fieldset>
+			
+			<fieldset>
+				<h3 class="fieldsetHead">Miscellaneous</h3>
+				<label for="comments" style="display: inline-block; margin-top: 7px;">Anything else you'd like to tell us about your robot? (200 character max):</label><br>
+				<textarea id="inComments" name="comments" rows="4" cols="85" maxlength="200" placeholder="Your comments here..."></textarea>
+			</fieldset>
+			
+			<input type="submit" value="Submit Form">
+		</form>
+		<div class="buttonList">
+			<a id="cancelButton" href="scouter_main.html">Cancel</a>
+		</div>
+		<script type="text/javascript" src="../data/settings.js"></script>
+		<script type="text/javascript" src="../script/get_team_name.js"></script>
+		<script type="text/javascript" src="../script/submit_report.js"></script>
+		<script type="text/javascript" src="../script/get_version.js"></script>
+		<script type="text/javascript" src="../script/get_event_keys.js"></script>
+		<script>
+			get_version();
+		document.querySelector("h4 span").innerHTML = get_version_string();
+		function preventBack() {
+            window.history.forward(); 
+        }
+        
+        setTimeout("preventBack()", 0);
+			function pick_button() {
+				if (localStorage.source == "master") document.getElementById("cancelButton").href = "master_main.html";
+			}
+			
+			// Initialize event key select box
+			const choices = new Choices(document.getElementById("inEventkey"), {
+				itemSelectText: ""
+			});
+			choices.setChoices(get_all_event_names().map(name => {
+				return { value: ALL_EVENT_KEYS[name], label: name };
+			}), "value", "label");
+
+			if (localStorage.source == "scout") {
+				if (default_event_key != "") choices.setChoiceByValue(default_event_key);
+				if (!allow_event_key_edits) choices.disable();
+			} else if (localStorage.source == "edit") {
+				// Prefill form inputs with edit data and remove button to go to other form type
+				document.getElementById("switchFormButton").style.display = "none";
+				document.querySelector("input[type='submit']").value = "Finish Edits";
+				document.querySelector("body h1").innerHTML = "EDIT VERBAL REPORT";
+				document.querySelector("head title").innerHTML = "Edit Verbal Report :: 4855 Scouting";
+				var formID = localStorage.editID;
+				
+				// Parse out form
+				var form = JSON.parse(localStorage.getItem(formID));
+				
+				document.getElementById("inName").value = form.name;
+				document.getElementById("inTeamno").value = form.teamno;
+				document.getElementById("inTeamno").disabled = true;
+				choices.setChoiceByValue(form.eventkey);
+				document.getElementById("inDrivetrain").value = form.drivetrain;
+				document.getElementById("inWeight").value = form.weight;
+				document.getElementById("inDefense").value = form.defense;
+				document.getElementById("inCp2").checked = form.cp2 == "1";
+				document.getElementById("inCp3").checked = form.cp3 == "1";
+				document.getElementById("inDefense").value = form.defense;
+				document.getElementById("inComments").value = form.comments;
+				append_team_name();
+				
+				if (localStorage.masterInit) {
+					document.getElementById("cancelButton").href = "master_view_team.html";
+					localStorage.currentTeam = localStorage.editTeamno;
+				} else {
+					document.getElementById("cancelButton").href = "scout_view_data.html";
+					localStorage.currentID = "form-" + localStorage.editTeamno + "-" + localStorage.overrideEditID;
+				}
+			}
+			
+			function append_team_name() {
+				var teamno = document.getElementById("inTeamno").value;
+				var val = document.getElementById("teamname");
+				if (teamno != "") {
+					val.innerHTML = "<h3 style='margin: 0;'>Team " + teamno + "</h3><br>" + get_team_name(teamno);
+				} else val.innerHTML = "Type a team number to verify their name here";
+			}
+			
+			// When the window is closed, reset all resources
+			window.addEventListener("beforeunload", function() {
+				if (localStorage.source == "edit") {
+					localStorage.overrideEditID = "";
+					localStorage.editTeamno = "";
+					localStorage.editID = "";
+				}
+			});
+		</script>
+	</body>
+</html>

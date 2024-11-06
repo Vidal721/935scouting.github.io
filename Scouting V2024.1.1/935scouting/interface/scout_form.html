@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>New Report : 935 Scouting</title>
+		<script type="text/javascript"></script>
+		<link href="../script/choices-library/styles/choices.min.css" rel="stylesheet">
+		<link href="../data/styles.css" rel="stylesheet" type="text/css">
+		<!-- Include choices library -->
+		<script type="text/javascript" src="../script/choices-library/scripts/choices.min.js"></script>
+	</head>
+	<body onload="pick_button(); climbInputDisabling(); defenseInputDisabling();">
+		<h1>NEW SCOUTING REPORT</h1>
+		<div class="buttonList" id="switchFormButton" style="margin-bottom: 36px;">
+			<div class="tooltip">
+				<span class="tooltiptext">Switch to the verbal form if you're collecting team data by talking to people in the pits.</span>
+				<a href="verbal_form.html">Verbal Form</a>
+			</div>
+		</div>
+		<form id="scout" action="" onsubmit="return false">
+			
+			<fieldset>
+				<input type="hidden" id="formtype" name="formtype" value="match">
+				<div class="tooltip">
+					<span class="tooltiptext">Make sure to spell your name the same way on every form. Use first name and last inital (i.e. John S)</span>
+					<label for="name">Scouter Name</label>
+				</div>
+				<input id="inName" name="name" required>
+				<br>
+				<span id="teamname" style="float: right; text-align: center; margin-right: 12px; transform: translateY(10px);">Type a team number to verify their name here</span>
+				<div class="tooltip">
+					<span class="tooltiptext">Enter the team number of the team you are currently scouting.</span>
+					<label for="teamno">Team #</label>
+				</div>
+				<input id="inTeamno" name="teamno" autocomplete="off" required onInput="append_team_name()"><br>
+				<label for="matchno" style="clear: both;">Qualification Match #</label><input id="inMatchno" autocomplete="off" name="matchno" required><br>
+				<div class="tooltip">
+					<span class="tooltiptext">Pick the event that the match occurred at. If this field is grayed out, then it has already been pre-selected.</span>
+					<label for="eventkey">Event Name</label>
+				</div>
+				<select required class="form-control" name="inEventkey" id="inEventkey">
+					<option value="cowtownthrowdown">cowtownthrowdown</option>
+				</select>
+				<br>
+			</fieldset>
+			
+			<fieldset>
+				<h3 class="fieldsetHead">Autonomous</h3>
+				<label for="autocross"><strong>Autonomous</strong> - Autocross completion (did they cross the line in auto?)</label>
+				<input type="checkbox" name="autocross" id="inAutocross" class="Checkboxes"><br>
+				<label for="autolow"><strong>Autonomous</strong> - Notes in Amp</label>
+				<input name="autolow" id="inAutolow" size="3" autocomplete="off" value="0" required>
+				<div class="counterButtons" unselectable="on">
+					<div class="increasebtn" onClick="incElement(document.getElementById('inAutolow'));">
+						<span>&oplus;</span>
+					</div>
+					<div class="decreasebtn" onClick="decElement(document.getElementById('inAutolow'));">
+						<span>&#8854;</span>
+					</div>
+				</div>
+				<br>
+				<label for="autohigh"><strong>Autonomous</strong> - Notes in Speaker</label>
+				<input name="autohigh" id="inAutohigh" autocomplete="off" size="3" value="0" required>
+				<div class="counterButtons" unselectable="on">
+					<div class="increasebtn" onClick="incElement(document.getElementById('inAutohigh'));">
+						<span>&oplus;</span>
+					</div>
+					<div class="decreasebtn" onClick="decElement(document.getElementById('inAutohigh'));">
+						<span>&#8854;</span>
+					</div>
+				</div>
+				<br>
+			</fieldset>
+			
+			<fieldset>
+				<h3 class="fieldsetHead">Teleoperated</h3>
+				<label for="lowport"><strong>Teleop</strong> - Notes in Amp</label>
+				<input name="lowport" id="inLowport" autocomplete="off" size="3" value="0" required>
+				<div class="counterButtons" unselectable="on">
+					<div class="increasebtn" onClick="incElement(document.getElementById('inLowport'));">
+						<span>&oplus;</span>
+					</div>
+					<div class="decreasebtn" onClick="decElement(document.getElementById('inLowport'));">
+						<span>&#8854;</span>
+					</div>
+				</div>
+				<br>
+
+				<label for="highport"><strong>Teleop</strong> - Notes in speaker</label>
+				<input name="highport" id="inHighport" autocomplete="off" size="3" value="0" required>
+
+				<div class="increasebtn" onClick="incElement(document.getElementById('inHighport'));">
+					<span>&oplus;</span>
+				</div>
+				<div class="decreasebtn" onClick="decElement(document.getElementById('inHighport'));">
+					<span>&#8854;</span>
+				</div>
+
+		
+				<br>
+				
+				<div class="tooltip">
+					<span class="tooltiptext"></span>
+					<label for="cp2"><strong>Speaker</strong> - Can they shoot speaker</label>
+				</div>
+				<input type="checkbox" name="cp2" id="inCp2" class="Checkboxes"><br>
+				
+				<div class="tooltip">
+					<span class="tooltiptext"></span>
+					<label for="cp3"><strong>Amp</strong> - Can they make amp</label>
+				</div>
+				<input type="checkbox" name="cp3" id="inCp3" class="Checkboxes"><br>
+			</fieldset>
+			
+			<fieldset>
+				<h3 class="fieldsetHead">Defense</h3>
+				<label for="defense"><strong>Defense</strong> - Did they attempt defense?</label>
+				<select name="defense" id="inDefense" onChange="defenseInputDisabling()"> <!--onChange="defenseInputDisabling()"-->
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</select><br>
+				<label for="defenserate"><strong>Defense</strong> - Rate performance</label>
+				<select name="defenserate" id="inDefenserate" required>
+					<option value="0">Didn't attempt</option>
+					<option value="1">Poor - Failed to disrupt gameplay</option>
+					<option value="2">Strong - Disrupted opposing scoring efforts</option>
+				</select><br>
+				<label for="defenseexp">Explain (80 character max):</label><input id="inDefenseexp" name="defenseexp" placeholder="Very physical, smashed into robots trying to shoot..." autocomplete="off" maxlength="80" size="90"><br>
+			</fieldset>
+			
+			<fieldset>
+				<h3 class="fieldsetHead">Endgame</h3>
+				<div class="tooltip">
+					<span class="tooltiptext">Mark "None" if the team failed to reach the rendezvous point. Mark "Parked" if the team's climb failed, or if they just sat in the rendezvous point.</span>
+					<label for="climb"><strong>Climb</strong> - Success</label>
+				</div>
+				<select name="climb" id="inClimb" onChange="climbInputDisabling()">
+					<option value="0">None</option>
+					<option value="1">Parked</option>
+					<option value="2">Climbed</option>
+				</select><br>
+				<div class="tooltip">
+					<span class="tooltiptext">Check this box if the team clearly TRIED to climb but was unsuccessful due to mechanism failure, external influence, etc.</span>
+					<label for="climbattempt"><strong>Climb</strong> - Failed attempt?</label>
+				</div>
+				<input type="checkbox" name="climbattempt" id="inClimbattempt" class="Checkboxes"><br>
+				<div class="tooltip">
+					<span class="tooltiptext">Mark this box if the team balanced the climbing bar AND did it while another robot climbed.</span>
+					<label for="climblevel"><strong>Climb</strong> - Harmony?</label>
+				</div>
+				<select name="climblevel" id="inClimblevel" required>
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</select><br>
+			</fieldset>
+			
+			<fieldset>
+				<h3 class="fieldsetHead">Miscellaneous</h3>
+				<input type="checkbox" name="inner" id="inInner" class="Checkboxes"><label for="inner">I watched this team <strong>shoot and score trap</strong> during this match</label><br>
+				<input type="checkbox" name="penalties" id="inPenalties" class="Checkboxes"><label for="penalties" style="color: #CA0033">I watched this team incur <strong>a great number of penalties</strong> OR incur a <strong>red/yellow card</strong> during this match</label><br>
+				<input type="checkbox" name="breakdown" id="inBreakdown" class="Checkboxes"><label for="breakdown" style="color: #CA0033">I watched this team <strong>tip over, break down, or lose communications</strong> during this match</label><br>
+				<input type="checkbox" name="Scouter" id="inScouter" class="Checkboxes"><label for="Scouter" style="color: #CA0033">I watched this team and answered this form <strong>to the best of my ability</strong></label><br>
+				<label for="comments">Do you have anything else to say about this robot that was not previously described? (300 character max):</label><br>
+				<textarea id="inComments" name="comments" rows="4" cols="85" maxlength="300" placeholder="Missed a lot of shots, was easily defended by using the rendezvous point as a chokehold..."></textarea>
+			</fieldset>
+			
+			<input type="submit" value="Submit Form">
+		</form>
+		<div class="buttonList">
+			<a id="cancelButton" href="scouter_main.html">Cancel</a>
+		</div>
+		<script type="text/javascript" src="../data/settings.js"></script>
+		<script type="text/javascript" src="../script/get_team_name.js"></script>
+		<script type="text/javascript" src="../script/submit_report.js"></script>
+		<script type="text/javascript" src="../script/get_version.js"></script>
+		<script type="text/javascript" src="../script/get_event_keys.js"></script>
+		<script>
+			get_version();
+		document.querySelector("h4 span").innerHTML = get_version_string();
+		function preventBack() {
+            window.history.forward(); 
+        }
+        
+        setTimeout("preventBack()", 0);
+			
+			function pick_button() {
+				if (localStorage.source == "master") document.getElementById("cancelButton").href = "master_main.html";
+			}
+			
+			// Initialize event key select box
+			const choices = new Choices(document.getElementById("inEventkey"), {
+				itemSelectText: "cowtownthrowdown"
+			});
+			choices.setChoices(get_all_event_names().map(name => {
+				return { value: ALL_EVENT_KEYS[name], label: name };
+			}), "value", "label");
+
+			if (localStorage.source == "scout") {
+				if (default_event_key != "") choices.setChoiceByValue(default_event_key);
+				if (!allow_event_key_edits) choices.disable();
+			} else if (localStorage.source == "edit") {
+				// Prefill form inputs with edit data and remove button to go to other form type
+				document.getElementById("switchFormButton").style.display = "none";
+				document.querySelector("input[type='submit']").value = "Finish Edits";
+				document.querySelector("body h1").innerHTML = "EDIT SCOUTING REPORT";
+				document.querySelector("head title").innerHTML = "Edit Report :: 4855 Scouting";
+				var formID = localStorage.editID;
+				
+				// Parse out form
+				var form = JSON.parse(localStorage.getItem(formID));
+				
+				document.getElementById("inName").value = form.name;
+				document.getElementById("inTeamno").value = form.teamno;
+				document.getElementById("inTeamno").disabled = true;
+				document.getElementById("inMatchno").value = form.matchno;
+				choices.setChoiceByValue(form.eventkey);
+				document.getElementById("inAutocross").checked = form.autocross == "1";
+				document.getElementById("inAutolow").value = form.autolow;
+				document.getElementById("inAutohigh").value = form.autohigh;
+				document.getElementById("inLowport").value = form.lowport;
+				document.getElementById("inHighport").value = form.highport;
+				document.getElementById("inCp2").checked = form.cp2 == "1";
+				document.getElementById("inCp3").checked = form.cp3 == "1";
+				document.getElementById("inDefense").value = form.defense;
+				document.getElementById("inDefenseexp").value = form.defenseexp;
+				document.getElementById("inDefenserate").value = form.defenserate;
+				document.getElementById("inClimb").value = form.climb;
+				document.getElementById("inClimblevel").value = form.climblevel;
+				document.getElementById("inClimbattempt").value = form.climbattempt == "true";
+				document.getElementById("inInner").checked = form.inner == "true";
+				document.getElementById("inPenalties").checked = form.penalties == "true";
+				document.getElementById("inBreakdown").checked = form.breakdown == "true";
+				document.getElementById("inComments").value = form.comments;
+				append_team_name();
+				climbInputDisabling();
+				defenseInputDisabling();
+				
+				if (localStorage.masterInit) {
+					document.getElementById("cancelButton").href = "master_view_team.html";
+					localStorage.currentTeam = localStorage.editTeamno;
+				} else {
+					document.getElementById("cancelButton").href = "scout_view_data.html";
+					localStorage.currentID = "form-" + localStorage.editTeamno + "-" + localStorage.overrideEditID;
+				}
+			}
+			
+			function append_team_name() {
+				var teamno = document.getElementById("inTeamno").value;
+				var val = document.getElementById("teamname");
+				if (teamno != "") {
+					val.innerHTML = "<h3 style='margin: 0;'>Team " + teamno + "</h3><br>" + get_team_name(teamno);
+				} else val.innerHTML = "Type a team number to verify their name here";
+			}
+			
+			// Increments a specific form value
+			function incElement(elm) {
+				if (!Number.isInteger(Number(elm.value))) elm.value = "1"; else elm.value = Number(elm.value) + 1;
+			}
+			
+			// Decrements a specific form value
+			function decElement(elm) {
+				if (!Number.isInteger(Number(elm.value)) || Number(elm.value) <= 0) elm.value = "0"; else elm.value = Number(elm.value) - 1;
+			}
+			
+			// Changes ability to edit balance/failed climb fields depending on the value of the climbing field
+			function climbInputDisabling() {
+				var climbVal = document.getElementById("inClimb").value;
+				if (climbVal == "2") {
+					// CLIMB was marked
+					document.getElementById("inClimbattempt").checked = false;
+					document.getElementById("inClimbattempt").disabled = true;
+					document.getElementById("inClimblevel").disabled = false;
+				} else {
+					// NO CLIMB was marked
+					document.getElementById("inClimbattempt").disabled = false;
+					document.getElementById("inClimblevel").disabled = true;
+					document.getElementById("inClimblevel").value = "0";
+				}
+			}
+			
+			function defenseInputDisabling() {
+				var defenseVal = document.getElementById("inDefense").value;
+				if (defenseVal == "1") {
+					// DEFENSE was marked
+					document.getElementById("inDefenserate").disabled = false;
+					document.getElementById("inDefenseexp").disabled = false;
+					document.getElementById("inDefenserate").value = "1";
+				} else {
+					// NO DEFENSE was marked
+					document.getElementById("inDefenserate").value = "0";
+					document.getElementById("inDefenseexp").value = "";
+					document.getElementById("inDefenserate").disabled = true;
+					document.getElementById("inDefenseexp").disabled = true;
+				} 
+			}
+			
+			// When the window is closed, reset all resources
+			window.addEventListener("beforeunload", function() {
+				if (localStorage.source == "edit") {
+					localStorage.overrideEditID = "";
+					localStorage.editTeamno = "";
+					localStorage.editID = "";
+				}
+			});
+		</script>
+	</body>
+</html>

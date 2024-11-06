@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Simulate Match : 935 Scouting</title>
+		<script type="text/javascript"></script>
+    	<link href="../data/styles.css" rel="stylesheet" type="text/css">
+	</head>
+	<body onload="load_data()">
+		<h1>SIMULATE MATCH</h1>
+		<p>
+			Use this interface to simulate any matchup between two alliances. A simulated score breakdown will also be displayed, allowing you to check each individual team's predicted contribution. If there are only verbal forms in the database for a team, that team <strong>will not</strong> be listed.
+		</p>
+		
+		<form id="simulateForm" action="" onSubmit="return false">
+			<fieldset id="redAllianceForm" class="allianceForm">
+				<h3>RED ALLIANCE</h3>
+				<select name="redTeam1" id="redTeam1" class="teamSelect" required>
+					 <option value="" disabled selected>Pick a team</option>
+				</select><br>
+				<select name="redTeam2" id="redTeam2" class="teamSelect" required>
+					<option value="" disabled selected>Pick a team</option>
+				</select><br>
+				<select name="redTeam3" id="redTeam3" class="teamSelect" required>
+					<option value="" disabled selected>Pick a team</option>
+				</select>
+			</fieldset>
+			
+			<fieldset id="blueAllianceForm" class="allianceForm">
+				<h3>BLUE ALLIANCE</h3>
+				<select name="blueTeam1" id="blueTeam1" class="teamSelect" required>
+					<option value="" disabled selected>Pick a team</option>
+				</select><br>
+				<select name="blueTeam2" id="blueTeam2" class="teamSelect" required>
+					<option value="" disabled selected>Pick a team</option>
+				</select><br>
+				<select name="blueTeam3" id="blueTeam3" class="teamSelect" required>
+					<option value="" disabled selected>Pick a team</option>
+				</select>
+			</fieldset>
+			<br>
+			<div class="defenseCheckbox" style="text-align: center;">
+				<label for="playDefense">Simulate defense?: </label>
+				<div class="tooltip">
+					<span class="tooltiptext">When checked, simulator will choose a team on both alliances to play defense based on how often they attempt it. Defensive strength will be based on prior forms submitted for the team, and the defense will target the highest power cell scorer. Some of the defender's scoring will be reduced due to the time spent playing defense.</span>
+					<input type="checkbox" id="playDefense" name="playDefense">
+				</div>
+				<br>
+			</div>
+			<input type="submit" value="Begin match!">
+		</form>
+		
+		<div id="simMatchResults">
+			<h2 id="projection"></h2>
+			<h3>Ramageddon Match Simulation</h3>
+			<div id="redResults" class="simTeamResults">
+				<div class="simDataBox" id="simRedTeams">
+					
+					<!-- Red Team numbers go here-->
+					
+				</div>
+				<div class="simDataBox" id="simRedScore">
+					
+					<!-- Red Gen Data goes here-->
+					
+				</div>
+				<br>
+				<div class="simBreakdownBox">
+					<div class="simRPBox">
+						Win
+					</div>
+					<div class="simRPBox">
+						Hang
+					</div>
+					<div class="simRPBox">
+						Stg. 3
+					</div>
+					<div id="simRedBreakdown">
+						<!-- Red Gen Data goes here-->
+					</div>
+				</div>
+			</div>
+			<div id="blueResults" class="simTeamResults">
+				<div class="simDataBox" id="simBlueScore">
+					<!-- Blue score in h2 tags goes here-->
+				</div>
+				<div class="simDataBox" id="simBlueTeams">
+					
+					<!-- Blue Team numbers go here-->
+					
+				</div>
+				<br>
+				<div class="simBreakdownBox">
+					<div class="simRPBox">
+						Win
+					</div>
+					<div class="simRPBox">
+						Hang
+					</div>
+					<div class="simRPBox">
+						Stg. 3
+					</div>
+					<div id="simBlueBreakdown">
+						<!-- Blue Gen Data goes here-->
+					</div>
+				</div>
+			</div>
+			<div id="simGameBreakdown">
+				<h3>Match Analysis</h3>
+				<table id="simGameTable">
+					<!-- Game breakdown data table goes here -->
+				</table>
+			</div>
+			<div id="simTeamAttributes">
+				<p><em>Click on a team above to view their individual output</em></p>
+			</div>
+		</div>
+		
+		<div class="buttonList">
+			<a href="master_main.html">Go back</a>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/get_team_name.js"></script>
+	<script type="text/javascript" src="../script/calculate_rpi.js"></script>
+	<script type="text/javascript" src="../script/simulate_match.js"></script>
+	<script type="text/javascript" src="../script/get_simulated_stat.js"></script>
+	<script type="text/javascript" src="../script/get_all_team_forms.js"></script>
+	
+	<script>
+		get_version();
+		document.querySelector("h4 span").innerHTML = get_version_string();
+		function preventBack() {
+            window.history.forward(); 
+        }
+        
+        setTimeout("preventBack()", 0);
+		
+		window.addEventListener('load', simulate_match);
+		
+		function load_data() {
+			if (localStorage.masterInit) {
+				// Show the team numbers that have data
+				var teamsWithData = JSON.parse(localStorage.teamsWithData);
+				var teamLists = document.getElementsByClassName("teamSelect");
+
+				Array.prototype.forEach.call(teamLists, function(list) {
+					// Add a list of all teams with data onto all six team lists
+					for (var i = 0; i < teamsWithData.length; i ++) {
+						// Before this team can be added to the list we must make sure that it has at least one MATCH FORM, not counting verbal forms
+						var teamFormList = get_team_forms(teamsWithData[i]);
+						var matchFormsPresent = false;
+						for (var j = 0; j < teamFormList.length; j ++) {
+							if (teamFormList[j].formtype == "match") matchFormsPresent = true;
+						}
+						if (matchFormsPresent) list.innerHTML += '<option value="' + teamsWithData[i] + '">' + teamsWithData[i] + '</option>';
+					}
+				});
+			}
+		}
+	</script>
+</html>

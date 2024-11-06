@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>View Team Data : 935 Scouting</title>
+		<script type="text/javascript"></script>
+		<link href="../data/styles.css" rel="stylesheet" type="text/css">
+	</head>
+	<body onload="load_data()">
+		<h1 id="reportDisplay">VIEWING REPORTS FOR TEAM </h1>
+		<h4 id="tbalink"></h4>
+		<div id="rpiInfo">
+			<h3>Team Overview</h3>
+			<h4 id="rpi">Calculated RPI: </h4>
+			<div id="overview1" class="overview">
+				<h4>Skills</h4>
+			</div>
+			<div id="overview2" class="overview">
+				<h4>Attributes/Abilities</h4>
+			</div>
+			<br>
+			<small>A team's RPI (Ramageddon Power Index) is used to represent the team's average contribution to an alliance. RPI is adjusted based on all scoring counts from every available scouting sheet; therefore, as such, its accuracy is far greater with a large quantity of sheets. RPI should not be the only metric used to assess the quality of a team.</small>
+		</div>
+		<div id="teamReports">
+			
+		</div>
+		<div id="buttonList">
+			<a class="clearButton" href="#" onclick="delete_team()">Delete all</a>
+			<a href="master_main.html">Go back</a>
+		</div>
+		
+		<script type="text/javascript" src="../script/extract_data.js"></script>
+		<script type="text/javascript" src="../script/show_data.js"></script>
+		<script type="text/javascript" src="../script/get_team_name.js"></script>
+		<script type="text/javascript" src="../script/get_match_key.js"></script>
+		<script type="text/javascript" src="../script/calculate_rpi.js"></script>
+		<script type="text/javascript" src="../script/get_simulated_stat.js"></script>
+		<script type="text/javascript" src="../script/get_all_team_forms.js"></script>
+		<script>
+			get_version();
+		document.querySelector("h4 span").innerHTML = get_version_string();
+		function preventBack() {
+            window.history.forward(); 
+        }
+        
+        setTimeout("preventBack()", 0);
+			
+			var team;
+			
+			function load_data() {
+				// Display team number and blue alliance link
+				team = localStorage.currentTeam;
+				document.getElementById("reportDisplay").innerHTML += team;
+				document.getElementById("tbalink").innerHTML = "<a href=" + '"https://www.thebluealliance.com/team/' + team + '" target="_blank">Find team ' + team + " on The Blue Alliance</a>";
+				
+				// Grab team list and form ID list
+				var teamList = JSON.parse(localStorage.teamList);
+				var formList = JSON.parse(localStorage.formList);
+				var indexList = [];
+				
+				// Extract report information
+				for (var i = 0; i < teamList.length; i ++) {
+					if (teamList[i] == team) indexList.push(i);
+				}
+				
+				var formArray = [];
+				
+				// Now print out all the relevant forms
+				for (var i = 0; i < indexList.length; i ++) {
+					thisID = "form-" + team + "-" + formList[indexList[i]];
+					var myJSON = localStorage.getItem(thisID);
+					var myForm = JSON.parse(myJSON);
+					formArray.push(myForm);
+					form_print_data(myForm, document.getElementById("teamReports"));
+				}
+				
+				// Print out an overview of the team's stats
+				var powerInfo = calculate_rpi(formArray, true, false, "", false, "");
+				if (powerInfo[0] == -999) powerInfo[0] = 0;
+				document.getElementById("rpi").innerHTML += "" + powerInfo[0] + " (" + powerInfo[1] + ")";
+				
+				// Start with skills column
+				var breakdowns = 0, penalties = 0;
+				var forms = get_team_forms(team.toString());
+				for (var f = 0; f < forms.length; f ++) {
+					var form = forms[f];
+					if (form.formtype == "match") {
+						if (form.breakdown == "true") breakdowns ++;
+						if (form.penalties == "true") penalties ++;
+					}
+				}
+				var column1 = document.getElementById("overview1");
+				var ds = "";
+				//ds += "<p>: <strong>" + v + "</strong></p>";
+				ds += "<p>Avg. Auto notes Scored: <strong>" + get_stat(team, "auto")[1] + "</strong></p>";
+				ds += "<p>Avg. Teleop notes Scored: <strong>" + get_stat(team, "powerport")[1] + "</strong></p>";
+				ds += "<p>Most Common Endgame: <strong>" + get_stat(team, "endgame")[0] + "</strong></p>";
+				var dss  = get_stat(team, "defense")[2];
+				ds += "<p>Number of Climbs: <strong>" + get_stat(team, "endgame")[2] + "</strong> successful of <strong>" + get_stat(team, "endgame")[3] + "</strong> attempts</p>";
+				ds += "<p>Defensive Strength: " + dss + "</p>";
+				ds += "<p>Times Broken Down: <strong>" + breakdowns + "</strong></p>";
+				ds += "<p>Times Drawn Significant Penalties: <strong>" + penalties + "</strong></p>";
+				column1.innerHTML += ds;
+				
+				// Attributes/abilities column
+				var drivetrain = "?", trench = "?", weight = "?", defense = "?", cp2 = "?", cp3 = "?";
+				var canCp2 = -1, canCp3 = -1;
+				for (var f = 0; f < forms.length; f ++) {	// forms was defined earlier
+					var form = forms[f];
+					if (form.formtype == "verbal") {
+						drivetrain = form.drivetrain;
+						if (form.trench == "true") trench = "Yes"; else trench = "No";
+						weight = form.weight + "lbs";
+						canCp2 = form.cp2;
+						canCp3 = form.cp3;
+					}
+				}
+				var defense = get_stat(team, "defense")[3];
+				if (canCp2 == -1 || canCp3 == -1) {
+					canCp2 = get_stat(team, "cp")[0];
+					canCp3 = get_stat(team, "cp")[1];
+					if (canCp2) {
+						cp2 = "Yes";
+					} else cp2 = "<em>No?</em>";
+					if (canCp3) {
+						cp3 = "Yes";
+					} else cp3 = "<em>No?</em>";
+				} else {
+					if (canCp2 == "true") {
+						cp2 = "Yes";
+					} else cp2 = "No";
+					if (canCp3 == "true") {
+						cp3 = "Yes";
+					} else cp3 = "No";
+				}
+				
+				var column2 = document.getElementById("overview2");
+				ds = "";
+				//ds += "<p>: <strong>" + v + "</strong></p>";
+				ds += "<p>Type of drive: <strong>" + drivetrain + "</strong></p>";
+				ds += "<p>Weight: <strong>" + weight + "</strong></p>";
+				ds += "<p>Fits Under stage: <strong>" + trench + "</strong></p>";
+				//ds += "<p>Can Do Rotational Control: <strong>" + cp2 + "</strong></p>";
+				//ds += "<p>Can Do Positional Control: <strong>" + cp3 + "</strong></p>";
+				ds += "<p>Odds of Playing Defense in Match: " + defense + " (" + get_stat(team, "defense")[4] + "% of the time)</p>";
+				var c = "No"
+				
+				column2.innerHTML += ds;
+				
+				document.getElementById("rpiInfo").innerHTML += "<h5>Total # of forms for team: " + forms.length + "</h5>";
+			}
+			
+			function delete_team() {
+				if (prompt("This action will delete every form in the database for this team. Please type in their team number to confirm you would like to do this.") == team) {
+					// Well don't say I didn't warn ya lol
+					var forms = get_team_forms(team);
+					forms.forEach(function(form) {
+						delete_form(form.formID, false);
+					});
+					window.location.href = "master_main.html";
+				} else return 0;
+			}
+		</script>
+	</body>
+</html>

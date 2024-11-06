@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Master : 935 Scouting</title>
+		<script type="text/javascript"></script>
+    	<link href="../data/styles.css" rel="stylesheet" type="text/css">
+	</head>
+	<body onload="load_data()">
+		<div id="mySidenav" class="sidenav">
+			<a href="javascript:void(0)" class="closebtn" onclick=closeNav()>&times;</a>
+			<a href="../index.html">home</a>
+			<a href="interface/scouter_main.html">Scouter</a>
+			<a href="interface/password.html">Master scouter</a>
+			<a href="#">About</a>
+		</div>
+		<div id="alignicons">
+			<i class="fa-solid fa-bars" id="Navbar"  onclick=openNav()></i>
+		</div>
+		<h1>MY DATA</h1>
+		<ul id="masterTeamList">
+			<li>You have no teams in your database. Import some data by clicking below!</li>
+		</ul>
+		<h4 id="sheetsNo"></h4>
+		<div class="buttonList">
+			<a id="NEWBUTTON" href="scout_form.html">Create new data</a>
+			<div class="tooltip">
+				<span class="tooltiptext">When scouters send you data or when you need to load any data you previously exported, it can be added to your database here.</span>
+				<i class="fa-solid fa-upload"><a id="IMPORTBUTTON" href="master_upload.html"></a></i>
+			</div>
+			<div class="tooltip">
+				<span class="tooltiptext">This button will download a file onto your hard drive containing all the data currently in your database. Use this if you'd like to save your progress for later. The file you download can also be renamed if you need to organize by event.</span>
+				<a href="#" onclick="export_data('master')">Export data</a>
+			</div>
+			<div class="tooltip">
+				<span class="tooltiptext">Make sure you've exported your data before clicking this button. Resetting will clear all the forms from your database and cannot be undone!</span>
+				<a class="clearButton" href="master_main.html" onclick="reset_data()">Reset all</a>
+			</div>
+		</div>
+		<div class="buttonList">
+			<a href="master_rpi_rankings.html">RPI Rankings</a>
+			<a href="master_picklist.html">Picklist Generator</a>
+			<a href="master_match_sim.html">Simulate Match</a>
+			<a href="../index.html">Go back</a>
+		</div>
+		<div id="bestScouters">
+			<h2>MOST PRODUCTIVE SCOUTERS</h2>
+			<ol id="scouterRankings">
+			</ol>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/get_version.js"></script>
+	<script type="text/javascript" src="../script/get_team_name.js"></script>
+	<script type="text/javascript" src="../script/export_data.js"></script>
+	<script type="text/javascript" src="../script/get_all_team_forms.js"></script>
+	<script type="text/javascript" src="../script/get_match_key.js"></script>
+	<script>
+		
+		var set_source = function(e) {
+			if (localStorage.init) {
+				alert("WARNING: You already have data submitted as a normal scouter. You must first reset your data there before you can submit data as a master scouter.");
+				document.getElementById("NEWBUTTON").href = "/index.html";
+				return 0;
+			}
+			if (localStorage.overrideEditID != "" && localStorage.overrideEditID) {
+				if (!confirm("It appears you have a form edit session active. Please close that window, as it can cause issues with your forms. If this message is appearing in error, click OK to continue.")) {
+					e.preventDefault();
+				}
+			} else {
+				localStorage.source = "master";
+				localStorage.editID = "";
+				localStorage.overrideEditID = "";
+				localStorage.editTeamno = "";
+			}
+		}
+		var checkRegInit = function(e) {
+			if (localStorage.init) {
+				alert("WARNING: You already have data submitted as a normal scouter. You must first reset your data there before you can import data as a master scouter.");
+				document.getElementById("IMPORTBUTTON").href = "/index.html";
+				return 0;
+			}
+		}
+		document.getElementById("NEWBUTTON").addEventListener("click", set_source, false);
+		document.getElementById("IMPORTBUTTON").addEventListener("click", checkRegInit, false);
+		
+		function load_data() {
+			if (localStorage.masterInit) {
+				// Show the team numbers that have data
+				document.getElementById("masterTeamList").innerHTML = "";
+				if (typeof localStorage.currentTeam !== "undefined") localStorage.removeItem("currentTeam");
+				var teamsWithData = JSON.parse(localStorage.teamsWithData);
+				var teamList = JSON.parse(localStorage.teamList);
+				
+				var ds = "", fid = "";	// Display string, Form ID
+				for (let i = 0; i < teamsWithData.length; i ++) {
+					fid = teamsWithData[i];	// the team number in a string
+					var forms = get_team_forms(fid);
+					var formNum = forms.length;
+					var matchKeys = [];
+					var duplicateMatch = false;
+					// Find out if there are any duplicate match forms in this team's database
+					forms.forEach(function(form) {
+						var matchKey = get_match_key(form.eventkey, form.matchno);
+						if (matchKeys.indexOf(matchKey) == -1) matchKeys.push(matchKey); else {
+							duplicateMatch = true;
+						}
+					});
+					ds = "<li>";
+					if (duplicateMatch) ds += "<div class='tooltip matchDupeIcon'><span class='tooltiptext'>This team has two forms from the same match. This can cause problems with match and stat simulation.</span><span class='matchDupe'>!</span></div>";
+					ds += "<h2>" + fid + "</h2><h3>" + get_team_name(fid) + "</h3><a href='master_view_team.html' onclick='set_view_data(" + '"' + fid + '"' + ")'>" + formNum + " form(s) for this team</li>";
+					document.getElementById("masterTeamList").innerHTML += ds;
+				}
+				document.getElementById("sheetsNo").innerHTML = "Total number of forms: " + localStorage.sheets;
+				get_scouter_list();
+			} else document.getElementById("sheetsNo").display = "none";
+		}
+		function set_view_data(id) {
+			localStorage.currentTeam = id;
+		}
+		function reset_data() {
+			// Remove everything from localStorage
+			console.log("The master's localStorage is being reset...");
+			localStorage.clear();
+			localStorage.removeItem("masterInit");
+			var teamList = JSON.parse(localStorage.teamList);
+			var formList = JSON.parse(localStorage.formList);
+			for (let i = 0; i < localStorage.sheets; i ++) {
+				localStorage.removeItem("form-" + teamList[i] + "-" + formList[i]);
+			}
+			localStorage.removeItem("sheets");
+			localStorage.removeItem("teamList");
+			localStorage.removeItem("formList");
+			localStorage.removeItem("teamsWithData");
+			console.log("Master reset completed successfully");
+		}
+		// Returns an ordered list of the number of forms every person has submitted into the database
+		function get_scouter_list() {
+			var nameList = {};
+			var formList = JSON.parse(localStorage.formList);
+			var teamList = JSON.parse(localStorage.teamList);
+			document.getElementById("bestScouters").style.display = "block";
+			// Collect the list
+			formList.forEach(function(formID, index) {
+				let form = JSON.parse(localStorage.getItem("form-" + teamList[index] + "-" + formID));
+				let name = form.name.toUpperCase();
+				if (Object.keys(nameList).indexOf(name) == -1) {
+					nameList[name] = 1;
+				} else nameList[name] ++;
+			});
+			
+			// Sort the list
+			var nameArray = [];
+			for (var name in nameList) {
+				nameArray.push([name, nameList[name]]);
+			}
+			nameArray.sort(function(a, b) {
+				return b[1] - a[1];
+			});
+			
+			// Print the list
+			var leaderboard = document.getElementById("scouterRankings");
+			for (var i = 0; i < nameArray.length; i ++) {
+				leaderboard.innerHTML += "<li>" + nameArray[i][0] + " - " + nameArray[i][1] + " sheet(s) submitted</li>";
+			}
+		}
+	</script>
+</html>

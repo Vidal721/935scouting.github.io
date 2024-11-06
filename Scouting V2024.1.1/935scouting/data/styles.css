@@ -1,0 +1,741 @@
+/* CSS Document */
+html {
+	min-height: 100%;
+}
+body {
+	padding: 30px 2% 70px;
+	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
+	background-image: -webkit-linear-gradient(270deg,rgba(255,255,255,1.00) 64.25%,#fdd835 100%);
+	background-image: -moz-linear-gradient(270deg,rgba(255,255,255,1.00) 64.25%,#fdd835 100%);
+	background-image: -o-linear-gradient(270deg,rgba(255,255,255,1.00) 64.25%,#fdd835 100%);
+	background-image: linear-gradient(180deg,rgba(255,255,255,1.00) 64.25%,#fdd835 100%);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: bottom;
+	background-attachment: fixed;
+	text-align: center;
+}
+h1 {
+	text-align: center;
+	font-size: 240%;
+}
+h2 {
+	color: #412561;
+}
+h3 {
+	text-align: center;
+}
+strong {
+	text-decoration: none;
+}
+a {
+	font-weight: 250;
+	color: #6E3FA5;
+	text-decoration: none;
+}
+a:hover {
+	color: black;
+}
+h2 a {
+	font-weight: bold;
+}
+.tooltip {
+  	position: relative;
+  	display: inline-block;
+  	border-bottom: 2px dotted #412561;
+}
+.tooltip .tooltiptext {
+  	opacity: 0;
+	visibility: hidden;
+  	background-color: rgba(15, 15, 15, .8);
+  	color: white;
+  	text-align: center;
+  	padding: 4px 8px;
+  	border-radius: 2px;
+ 	transition: opacity .3s;
+	font-size: 11pt;
+	
+	width: 250px;
+  	bottom: 100%;
+  	left: 50%;
+  	margin-left: -125px;
+  	position: absolute;
+  	z-index: 1;
+}
+.tooltip:hover .tooltiptext {
+  	opacity: 1;
+	visibility: visible;
+}
+.buttonList .tooltip, .defenseCheckbox .tooltip {
+	border-bottom: none;
+}
+
+#titleRam {
+	width: 100px;
+	margin: auto;
+	display: block;
+	height: auto;
+}
+#footerImg {
+	width: 125px;
+	margin: auto;
+	display: block;
+	height: auto;
+}
+#buttonList, .buttonList {
+	text-align: center;
+	margin-top: 32px;
+	font-size: 120%;
+}
+#buttonList a, .buttonList a {
+	background-color: #fdd835;
+	color: white;
+	display: inline-block;
+	border: 2px solid #000;
+	padding: 12px;
+	text-decoration: none;
+}
+#buttonList a:hover, .buttonList a:hover {
+	background-color: black;
+	border-color: #fdd835;
+	border-radius: 20px;
+}
+.buttonList .clearButton, #buttonList .clearButton {
+	background-color: #A34B56;
+}
+.buttonList .clearButton:hover, #buttonList .clearButton:hover {
+	background-color: #C37C7C;
+}
+#rpiRankInfo {
+	background-color: #D2D2D2;
+	border: 2px solid black;
+	max-width: 700px;
+	padding: 12px;
+	margin: 20px auto;
+}
+#rpiRankInfo ol {
+	text-align: center;
+	font-size: 110%;
+	padding-left: 0;
+	margin-top: 26px;
+	list-style-position: inside;
+}
+
+/*Display styles for items on a scouter's or a master's data sheet list*/
+#scoutedList, #masterTeamList {
+	margin: 30px 6px 24px;
+	list-style-type: none;
+	padding: 12px;
+	background-color: #412561;
+	text-align: center;
+}
+#scoutedList li, #masterTeamList li {
+	padding: 10px;
+	display: inline-block;
+	border-width: 2px;
+	margin: 6px;
+	border-style: solid;
+	background-color: #D2D2D2;
+	width: 170px;
+	vertical-align: middle;
+	height: 120px;
+}
+#scoutedList li h2, #masterTeamList h2 {
+	text-align: center;
+	font-size: 140%;
+	padding: 0;
+	margin: 8px 0;
+}
+#scoutedList li h3, #masterTeamList h3 {
+	text-align: center;
+	font-size: 105%;
+	font-style: italic;
+	font-weight: normal;
+	margin: 10px 0 12px;
+}
+#sheetsNo {
+	text-align: center;
+	font-size: 85%;
+}
+.matchDupe {
+	border: 2px solid black;
+	border-radius: 16px;
+	background-color: #A34B56;
+	color: white;
+	width: 22px;
+	height: 22px;
+	display: block;
+	position: absolute;
+	font-size: 110%;
+	right: 62px;
+}
+.matchDupeIcon {
+	position: absolute;
+}
+#tbalink {
+	text-align: center;
+}
+#tbalink a {
+	font-weight: normal;
+	font-style: italic;
+}
+#rpiInfo h3 {
+	color: #412561;
+	font-size: 160%;
+	margin: 8px 0 12px;
+}
+#rpi, .overview h4 {
+	margin: 6px 0;
+}
+#rpi {
+	font-size: 120%;
+}
+#rpiInfo {
+	border: 2px solid #000;
+	padding: 16px;
+	margin: 14px auto;
+	max-width: 700px;
+	display: block;
+	text-align: center;
+	background-color: #D2D2D2;
+}
+.overview {
+	display: inline-block;
+	width: 45%;
+	margin: 10px 6px;
+	text-align: center;
+	vertical-align: top;
+}
+.overview p {
+	margin: 6px 0;
+}
+#rpiAdjusts {
+	text-align: center;
+	font-style: italic;
+	margin-bottom: 12px;
+}
+#bestScouters {
+	display: none;
+	text-align: center;
+	border: 2px solid #000;
+	background-color: #E7E7E7;
+	padding: 8px 0;
+	margin: 48px auto;
+	max-width: 500px;
+}
+#bestScouters ol {
+	padding-left: 0;
+	text-align: center;
+	list-style-position: inside;
+}
+#bestScouters ol li {
+	padding-bottom: 6px;
+}
+
+/*Display styles for a form's data*/
+.formData {
+	padding: 12px;
+	margin: 12px;
+	max-width: 400px;
+	border: 2px solid #000;
+	display: inline-block;
+	background-color: #D2D2D2;
+}
+.formData h2 {
+	text-align: center;
+	font-size: 200%;
+	padding: 0;
+	margin: 10px 0 10px;
+}
+.formData h3 {
+	text-align: center;
+	font-size: 130%;
+	font-style: italic;
+	font-weight: normal;
+}
+.formData ul {
+	list-style-type: none;
+	padding: 0 0 16px;
+}
+.formData ul li {
+	text-align: center;
+}
+
+/*Display styles for a list of forms (or just one form) that have all their data being shown*/
+#teamReports {
+	text-align: center;
+	background-color: #412561;
+}
+#teamReports .formData {
+	vertical-align: middle;
+}
+#reportList {
+	display: block;
+	width: 100%;
+	text-align: center;
+}
+#reportList .formData {
+	max-width: 500px;
+}
+.rate {
+	font-weight: 260;
+	font-size: 115%;
+	text-decoration: underline;
+}
+.breaksmall {
+	display: block;
+	margin-top: 12px;
+}
+
+/*Display styles for the scouting form element itself as well as the form to filter RPI rankings*/
+input {
+	border: 1px solid #353535;
+}
+/* Searchable dropdown styles */
+.choices {
+	margin: 6px;
+	margin-bottom: -10px !important;
+	width: 300px;
+	height: 24px;
+	border: 1px solid #353535;
+	display: inline-block;
+}
+.choices__inner {
+	padding-top: 3.5px;
+	min-height: 0px;
+	width: 283px;
+	border-radius: 0px;
+}
+.choices__list--single {
+	padding: 0px;
+}
+.choices__list--dropdown .choices__item--selectable {
+	padding-right: 0px;
+}
+
+#scout {
+	padding: 12px 24px;
+	margin: 0 0.5%;
+	background-color: rgb(253, 216, 53, 0.5);
+	border-radius: 10px;
+}
+#rpilist {
+	text-align: center;
+	margin: 16px 0;;
+	width: 100%;
+	border-bottom: 2px solid black;
+}
+#scout label, #scout input, #scout textarea, #scout select, #rpilist label, #rpilist select, #rpilist input {
+	margin: 6px;
+	display: inline;
+}
+#scout label , #scout input[type="checkbox"]{
+	margin: 10px 6px;
+}
+#scout input {
+	box-shadow: inset 0 0 0.25rem #fff;
+	resize: none;
+	padding: 5px;
+}
+#scout textarea {
+	padding: 6px;
+	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
+	border-radius: 8px;
+  	box-shadow: inset 0 0 0.25rem #fff;
+	resize: none;
+}
+#scout fieldset {
+	margin: 8px;
+	border: 2px solid #000;
+	background-color: #D2D2D2;
+}
+#scout input[type="submit"], #rpilist input[type="button"]{
+	background-color: #764BA3;
+	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
+	font-size: 125%;
+	color: white;
+	display: inline-block;
+	border: 2px solid #000;
+	display: block;
+	padding: 12px;
+	text-decoration: none;
+	box-shadow: none;
+	margin: 20px auto;
+}
+#scout input[type="submit"]:hover, #rpilist input[type="button"]:hover  {
+	background-color: #9f7cc3;
+	cursor: pointer;
+}
+.counterButtons {
+	display: inline-block;
+	transform: translateY(5px);
+	user-select: none;
+}
+.counterButtons .countButton {
+	border: 2px solid black;
+	width: 38px;
+	height: 13px;
+	line-height: 0;
+	text-align: center;
+	background-color: #000;
+	color: white;
+}
+.counterButtons .countButton span {
+	line-height: 50%;
+}
+.counterButtons .countButton:hover {
+	cursor: pointer;
+	background-color: #9f7cc3;
+}
+.counterButtons .countButton:active {
+	background-color: #CAB7DE;
+}
+.fieldsetHead {
+	text-align: center;
+	font-size: 120%;
+	color: #666666;
+}
+
+/* Display styles for the import screen AND the simulate match screen*/
+#import {
+	padding: 12px 24px;
+	margin: 45px auto;
+	background-color: #412561;
+	display: block;
+	width: 300px;
+	text-align: center;
+}
+#import input[type="file"] {
+	text-align: center;
+	color: white;
+	font-size: 100%;
+}
+#import input[type="submit"], #simulateForm input[type="submit"] {
+	background-color: #764BA3;
+	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
+	font-size: 125%;
+	color: white;
+	display: inline-block;
+	border: 2px solid #000;
+	display: block;
+	padding: 12px;
+	text-decoration: none;
+	box-shadow: none;
+	margin: 20px auto;
+}
+#import input[type="submit"]:hover, #simulateForm input[type="submit"]:hover  {
+	background-color: #9f7cc3;
+	cursor: pointer;
+}
+#simulateForm {
+	text-align: center;
+}
+.allianceForm {
+	max-width: 470px;
+	width: 40%;
+	display: inline-block;
+	text-align: center;
+	margin: 8px;
+	border: 2px solid #000;
+	background-color: #D2D2D2;
+	padding: 10px 10px 30px;
+	color: white;
+}
+#redAllianceForm {
+	background-color: #660000;
+}
+#blueAllianceForm {
+	background-color: #000066;
+}
+.teamSelect {
+	margin: 7px;
+}
+#simMatchResults {
+	max-width: 900px;
+	padding: 8px;
+	display: none;
+	text-align: center;
+	border: 2px solid #000;
+	background-color: #D2D2D2;
+	margin-top: 32px;
+	margin-left: auto;
+	margin-right: auto;
+}
+#projection {
+	font-size: 130%;
+}
+.simTeamResults {
+	width: 45%;
+	display: inline-block;
+	text-align: center;
+	margin: 8px;
+	border: 2px solid #000;
+	vertical-align: middle;
+	padding: 16px 0;
+}
+#redResults {
+	background-color: #EEAAAA;
+}
+#blueResults {
+	background-color: #AAAAEE;
+}
+.simDataBox {
+	width: 45%;
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+	margin: 4px;
+	border: 2px solid #000;
+	background-color: #E7E7E7;
+}
+.simBreakdownBox {
+	width: -moz-calc(100% - 24px);
+	width: -webkit-calc(100% - 24px);
+	width: -o-calc(100% - 24px);
+	width: calc(100% - 24px);
+	margin: 10px;
+	display: inline-block;
+	text-align: center;
+	border: 2px solid #000;
+	background-color: #E7E7E7;
+	padding: 12px 0;
+}
+.simBreakdownBox p {
+	margin: 10px 0;
+}
+.simRPBox {
+	width: 26%;
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+	margin: 4px;
+	border: 2px solid #000;
+	border-radius: 8px;
+	background-color: #565656;
+	font-style: italic;
+}
+.simRPBox.complete {
+	background-color: #FFFFFF;
+	font-style: normal;
+	font-weight: bold;
+}
+#simTeamAttributes {
+	margin: 10px;
+	display: block;
+	text-align: center;
+	border: 2px solid #000;
+	background-color: #E7E7E7;
+	padding: 12px 0;
+}
+#simGameBreakdown {
+	margin: 10px;
+	display: block;
+	text-align: center;
+	border: 2px solid #000;
+	background-color: #E7E7E7;
+	padding: 12px 0;
+}
+#simGameBreakdown table {
+	margin: 0 auto;
+	max-width: 600px;
+}
+#simGameBreakdown table td {
+	padding: 6px;
+}
+
+/* Display styles for the picklist interface */
+
+#pickChoices {
+	text-align: center;
+	background-color: #412561;
+	padding: 16px;
+}
+.pickChoice {
+	margin: 10px;
+	display: inline-block;
+	text-align: center;
+	border: 2px solid #000;
+	background-color: #E7E7E7;
+	padding: 6px 0 8px;
+	width: 140px;
+	height: 90px;
+	vertical-align: middle;
+}
+.pickChoice h3 {
+	margin: 4px;
+}
+.pickChoice h4 {
+	margin: 2px;
+	font-size: 70%;
+}
+.pickChoice label {
+	font-size: 60%;
+	margin: 0 6px;
+}
+.pickChoice input {
+	margin: 4px 16px;
+}
+#pickForm {
+	text-align: center;
+	margin: 20px 0;
+}
+#availableList {
+	width: 100%;
+	max-width: 600px;
+	margin: 24px auto;
+	text-align: center;
+	border: 2px solid #000;
+	background-color: #E7E7E7;
+	padding: 16px;
+}
+#availableList table {
+	margin: 0 auto;
+	border-collapse: collapse;
+}
+#availableList table tr td {
+	padding: 3px 6px;
+}
+#availableList table thead {
+	font-weight: bold;
+	color: #412561;
+	font-size: 110%;
+}
+.pickrank {
+	font-weight: bold;
+	text-shadow: 2px 2px 4px #412561;
+}
+#pickCustom {
+	text-align: center;
+	max-width: 900px;
+	width: 100%;
+	margin: 24px auto;
+}
+#pickCustom .ctrl {
+	display: inline-block;
+	width: 200px;
+	border: 2px solid #000;
+	background-color: #412561;
+	color: white;
+	padding: 8px;
+}
+.increment countButton{
+	background-color: #000;
+}
+.increasebtn{
+	display: inline-block;
+	font-size: xx-large;
+	margin-right: 20px;
+	cursor: pointer;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	border: 1px solid black;
+	height: 70px;
+	width: 70px;
+	text-align: center;
+	border-radius: 5px;
+	background-color: black;
+	color: white;
+	margin-top: 20px;
+
+}
+.decreasebtn{
+	display: inline-block;
+	font-size: xx-large;
+	cursor: pointer;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	border: 1px solid black;
+	height: 70px;
+	width: 70px;
+	text-align: center;
+	border-radius: 5px;
+	background-color: black;
+	color: white;
+	margin-top: 20px;
+	
+}
+.decreasebtn:hover{
+	background-color: #000066;
+}
+.increasebtn:hover{
+	background-color: #000066;
+}
+fieldset {
+	border-radius: 10px;
+	width: 95%;
+	height: auto;
+	text-align: left;
+  }
+form{
+	text-align: center;
+	display: inline-block;
+	background-color: white;
+	text-align: center;
+	width: 95%;
+}
+fieldset:hover{
+	background-color: red;
+}
+.Checkboxes{
+	width: 30px;
+	height: 30px;
+}
+
+
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+  background-color: black;
+}
+
+.sidenav a:hover {
+  color: black;
+  background-color: yellow;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+#Navbar:hover{
+	align-self: left;
+	background-color: yellow;
+}
+#alignicons{
+	text-align: left;
+}
